@@ -41,6 +41,75 @@ void ler_arquivo(FILE* fp, char palavras[100]){
 
 }
 
+void verbo_subst(char minusculas[10000][45], int tam_min, char maiusculas[10000][45], int tam_maius){
+	
+	char palavras[20000][45];
+	int n_palavras = 0;
+	
+	for(int x = 0; x < 20000; x++){
+		for(int r = 0; r < 45; r++){
+			palavras[x][r] = '\0';
+		}
+	}
+	
+	for(int x = 0; x < tam_min; x++){
+		if(strcmp(classes[x], "CN") == 0 || strcmp(classes[x], "V") == 0){
+			strcpy(palavras[n_palavras], minusculas[x]);
+			n_palavras++;
+		}
+	}
+	//TODO: SUBSTITUIR
+	
+	
+		
+}
+
+void verifica_classes(char** palavras, int* n_palavras){
+		
+	int tampalavra;
+	int pos1 = 0;
+	int pos2 = 0;
+	char maiusculas[10000][45];
+	char minusculas[10000][45];
+	
+	for(int x = 0; x < 10000; x++){
+		for(int r = 0; r < 45; r++){
+			minusculas[x][r] = '\0';
+		}
+	}
+	for(int x = 0; x < 10000; x++){
+		for(int r = 0; r < 45; r++){
+			maiusculas[x][r] = '\0';
+		}
+	}
+	
+	for(int x = 0; x < *n_palavras; x++){
+		if(palavras[x][0] >= 65 && palavras[x][0] <= 90){
+			strcpy(maiusculas[pos1], palavras[x]);
+			pos1++;
+		}
+		else if(palavras[x][0] >= 97 && palavras[x][0] <= 122){
+			strcpy(minusculas[pos2], palavras[x]);
+			pos2++;
+		}
+	}
+	
+
+	for(int x = 0; x < *n_palavras; x++){
+		tampalavra = strlen(maiusculas[x]);
+		for(int r = 0; r < tampalavra; r++){
+			if(maiusculas[x][r] >= 65 && maiusculas[x][r] <= 90){
+				maiusculas[x][r] += 32;
+			}
+		}
+	}
+	
+	verbo_subst(minusculas, pos2, maiusculas, pos1);
+
+		
+
+}
+
 void classe(char aux[45], int* size){
 
 
@@ -53,8 +122,6 @@ void classe(char aux[45], int* size){
       n_classe++;
     }
   }
-
-  verifica_classes(); // TODO
 
 }
 
@@ -90,10 +157,10 @@ void le_ate_barra(char* palavras, char aux[45], char** ans, int* i, int* j){
   }
 }
 
-void separar_string(char* palavras){
+char** separar_string(char* palavras, int* n_palavras){
 
   int i = 6;
-  int j = 0;
+  int j = *n_palavras;
   int k = 0;
   int tipos[100];
   char aux[45];
@@ -134,15 +201,9 @@ void separar_string(char* palavras){
     }
     i++;
   }
-
-
-  //for(int i = 0; i < 4; i++)
-  //printf("%d\n", j);
-
   i = 6;
 
   while(palavras[i] != '/' || palavras[i+1] != 's'){
-    //printf("%c\n", palavras[i]);
     if(palavras[i] == '/' && flag_barra == 0){
       i++;
       le_ate_barra(palavras, aux, ans, &i, &j);
@@ -153,20 +214,18 @@ void separar_string(char* palavras){
     }
     i++;
   }
-
-  for(int l = 0; l < j; l++)
-    printf("%s\n", ans[l]);
-
-  for(int l = 0; l < n_classe; l++)
-    printf("%s\n", classes[l]);
-
-
+  
+  *n_palavras = j;
+  return ans;
+	
 }
 
 int main(void){
 
-  char* palavras;
+  char* dados;
   FILE* arquivo1;
+  char** palavras;
+  int n_palavras = 0;
 
   for(int i = 0; i < 10000; i++){
     for (int j = 0; j < 10; j++) {
@@ -175,16 +234,17 @@ int main(void){
   }
 
 
-  palavras = (char*) malloc(100000*sizeof(char));
+  dados = (char*) malloc(100000*sizeof(char));
 
   arquivo1 = fopen("5.txt", "r");
 
-  ler_arquivo(arquivo1, palavras);
+  ler_arquivo(arquivo1, dados);
 
   //printf("%s\n", palavras);
 
-  separar_string(palavras);
-
+  palavras = separar_string(dados, &n_palavras);
+	
+  verifica_classes(palavras, &n_palavras);
   //printf("\n");
 
   free(palavras);
