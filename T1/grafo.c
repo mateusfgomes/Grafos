@@ -9,7 +9,7 @@
 
 
 struct no_aresta{
-	int v;
+	int dest;
 	elem peso;
 	noAresta *prox;
 
@@ -21,6 +21,7 @@ struct no_vertice{
 
 struct grafo_{
 	noVertice Adj[MAXNUMVERTICES];
+	noVertice Adj2[MAXNUMVERTICES];
 	int NumVertices;
 };
 
@@ -40,7 +41,7 @@ Grafo* criar_grafo(int* NumVertices){
 			for(int i = 0; i < G->NumVertices; i++){
 				G->Adj[i].ini = (noAresta*) malloc(sizeof(noAresta));
 				G->Adj[i].ini->peso = -1;
-				G->Adj[i].ini->v = -1;
+				G->Adj[i].ini->dest = -1;
 				G->Adj[i].ini->prox = NULL;
 				G->Adj[i].fim = G->Adj[i].ini;
 			}
@@ -55,12 +56,12 @@ void inserir_aresta(Grafo *G, int *v1, int *v2, elem *P){
 	else{
 		G->Adj[*v1].fim->prox = (noAresta*) malloc(sizeof(noAresta));
 		G->Adj[*v1].fim = G->Adj[*v1].fim->prox;
-		G->Adj[*v1].fim->v = *v2;									//GRAFO DIRECIONADO
+		G->Adj[*v1].fim->dest = *v2;									//GRAFO DIRECIONADO
 		G->Adj[*v1].fim->peso = *P;
 		G->Adj[*v1].fim->prox = NULL;
 		/*G->Adj[*v2].fim->prox = (noAresta*) malloc(sizeof(noAresta));
 		G->Adj[*v2].fim = G->Adj[*v2].fim->prox;
-		G->Adj[*v2].fim->v = *v1;									//GRAFO DIRECIONADO
+		G->Adj[*v2].fim->dest = *v1;									//GRAFO DIRECIONADO
 		G->Adj[*v2].fim->peso = *P;
 		G->Adj[*v2].fim->prox = NULL;*/
 	}
@@ -75,7 +76,7 @@ void remover_aresta(Grafo *G, int *v1, int *v2, int *erro, elem *P){
 		noAresta *ant = G->Adj[*v1].ini;
 		noAresta *atual = ant->prox;
 		while(atual != NULL && !encontrou){
-			if(atual->v == *v2){
+			if(atual->dest == *v2){
 				encontrou = 1;
 				*P = atual->peso;
 				ant->prox = atual->prox;
@@ -100,7 +101,7 @@ void imprime_grafo(Grafo *G){
 		printf("%d - ", i);
 		aux = G->Adj[i].ini->prox;
 		while(aux != NULL){
-			printf("%d ", aux->v);
+			printf("%d ", aux->dest);
 			aux = aux->prox;
 		}
 		printf("\n");
@@ -141,8 +142,8 @@ void dfs_busca(Grafo* gr, int inicial, int *cores){
 	aux = gr->Adj[inicial].ini;
 
 	while(aux != NULL){
-		if(cores[aux->v] == BRANCO){
-			dfs_busca(gr, aux->v, cores);	
+		if(cores[aux->dest] == BRANCO){
+			dfs_busca(gr, aux->dest, cores);	
 		}
 		aux = aux->prox;
 	}
@@ -184,9 +185,9 @@ int menor_peso(Grafo *gr, int vertice){
 
 }
 
-int listaadjvazia(Grafo *gr, int v){
+int listaadjvazia(Grafo *gr, int dest){
 
-	if(gr->Adj[v].ini->prox == NULL)
+	if(gr->Adj[dest].ini->prox == NULL)
 		return 1;
 	else
 		return 0;
@@ -203,7 +204,7 @@ void n_arestas_recursivo(Grafo *gr, int inicio, int *contador){
 		aux = aux->prox;
 		(*contador)++;
 	}
-	n_arestas_recursivo(gr, aux->v, contador);
+	n_arestas_recursivo(gr, aux->dest, contador);
 }
 
 int n_arestas_iterativo(Grafo *gr){
@@ -222,27 +223,25 @@ int n_arestas_iterativo(Grafo *gr){
 	return contador;
 }
 
-noAresta* primeirolistaadj(Grafo *gr, int v){
+noAresta* primeirolistaadj(Grafo *gr, int dest){
 
 	if(gr == NULL)
 		return NULL;
 		
 	else
-		return gr->Adj[v].ini->prox;
+		return gr->Adj[dest].ini->prox;
 
 }
 
 
 void proxadj(Grafo *gr, noAresta **Adj, int *fimlistaadj){
 
-	//printf("- %d -", Adj->v);
+	//printf("- %d -", Adj->dest);
 	
-
-
 }
 
 
-void visita_bfs(Grafo* G, int v, int distancia[], int cor[], int antecessor[]){
+void visita_bfs(Grafo* G, int dest, int distancia[], int cor[], int antecessor[]){
 
 	int peso, erro;
 	noAresta *Adj;
@@ -250,21 +249,21 @@ void visita_bfs(Grafo* G, int v, int distancia[], int cor[], int antecessor[]){
 	
 	FILA *F;
 	F = criar_fila();
-	cor[v] = AMARELO;
-	//distancia[v] = 0;
-	entra(F, v);
-	printf("v%d ", v);
+	cor[dest] = AMARELO;
+	//distancia[dest] = 0;
+	entra(F, dest);
+	printf("dest%d ", dest);
 	printf("\n----------- Fim Onda----------\n");
 	while(!fila_vazia(F)){
-		v = sai(F);
-		if(!listaadjvazia(G, v)){
-			Aux = G->Adj[v];
+		dest = sai(F);
+		if(!listaadjvazia(G, dest)){
+			Aux = G->Adj[dest];
 			Adj = Aux.ini->prox;
 			while(Adj != NULL){
-				if(cor[Adj->v] == BRANCO){
-					printf("v%d ", Adj->v);
-					cor[Adj->v] = AMARELO;
-					entra(F, Adj->v);
+				if(cor[Adj->dest] == BRANCO){
+					printf("dest%d ", Adj->dest);
+					cor[Adj->dest] = AMARELO;
+					entra(F, Adj->dest);
 				}
 				Adj = Adj->prox;
 			}
@@ -274,18 +273,18 @@ void visita_bfs(Grafo* G, int v, int distancia[], int cor[], int antecessor[]){
 
 }
 
-void caminho(int u, int v, int antecessor[]){
+void caminho(int u, int dest, int antecessor[]){
 
 
-	if(u == v)
+	if(u == dest)
 		printf("%d", u);
 
-	else if(antecessor[v] == -1)
+	else if(antecessor[dest] == -1)
 		printf("ERRO");
 
 	else{
-		caminho(u, antecessor[v], antecessor);
-		printf("%d", v);
+		caminho(u, antecessor[dest], antecessor);
+		printf("%d", dest);
 	}
 	
 
@@ -293,18 +292,18 @@ void caminho(int u, int v, int antecessor[]){
 
 void bfs(Grafo* G){
 
-	int v, distancia[MAXNUMVERTICES], antecessor[MAXNUMVERTICES];
+	int dest, distancia[MAXNUMVERTICES], antecessor[MAXNUMVERTICES];
 	int cor[MAXNUMVERTICES];
 
-	for(int v = 0; v < G->NumVertices; v++){
-		cor[v] = BRANCO;
-		//distancia[v] = -1;
-		//antecessor[v] = -1;
+	for(int dest = 0; dest < G->NumVertices; dest++){
+		cor[dest] = BRANCO;
+		//distancia[dest] = -1;
+		//antecessor[dest] = -1;
 	}
 
-	for(int v = 0; v < G->NumVertices; v++){
-		if(cor[v] == BRANCO)
-			visita_bfs(G, v, distancia, cor, antecessor);
+	for(int dest = 0; dest < G->NumVertices; dest++){
+		if(cor[dest] == BRANCO)
+			visita_bfs(G, dest, distancia, cor, antecessor);
 	}
 
 
