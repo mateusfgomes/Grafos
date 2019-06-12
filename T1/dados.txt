@@ -1,0 +1,13 @@
+nome do usuario: beltrano
+idade: 19
+cidade: Sao Carlos
+filme predileto: vingadores
+time: palmeiras
+cor predileta: azul
+
+nome do usuario: ciclano
+idade: 21
+cidade: Sao Carlos
+filme predileto: prometheus
+time: sao caetano
+cor predileta: branco

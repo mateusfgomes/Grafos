@@ -59,11 +59,11 @@ void inserir_aresta(Grafo *G, int *v1, int *v2, elem *P){
 		G->Adj[*v1].fim->dest = *v2;									//GRAFO DIRECIONADO
 		G->Adj[*v1].fim->peso = *P;
 		G->Adj[*v1].fim->prox = NULL;
-		/*G->Adj[*v2].fim->prox = (noAresta*) malloc(sizeof(noAresta));
+		G->Adj[*v2].fim->prox = (noAresta*) malloc(sizeof(noAresta));
 		G->Adj[*v2].fim = G->Adj[*v2].fim->prox;
 		G->Adj[*v2].fim->dest = *v1;									//GRAFO DIRECIONADO
 		G->Adj[*v2].fim->peso = *P;
-		G->Adj[*v2].fim->prox = NULL;*/
+		G->Adj[*v2].fim->prox = NULL;
 	}
 }
 
