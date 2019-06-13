@@ -137,6 +137,7 @@ int verificaLogin(char login[100], char senha[100], FILE* fp){
 	char login_correto[100]; //Login para percorrer o arquivo verificando
 	char senha_correto[100]; //Senha para percorrer o arquivo verificando
 	char ignora[100]; //Para ignorar caso nao seja o nome do login desejado
+	int posicao = 0;
 
 	memset(login_correto, '\0', 100); //zera os campos
 	memset(senha_correto, '\0', 100);
@@ -148,24 +149,25 @@ int verificaLogin(char login[100], char senha[100], FILE* fp){
 			fscanf(fp, "%[^\r\n]", senha_correto); //Ve se a senha esta certa
 			if(strcmp(senha, senha_correto) == 0){ //Se sim, loga
 				printf("Voce logou\n");
-				return 1;
+				return posicao;
 			}
 			else{
 				printf("Senha incorreta, digite novamente\n"); //Se nao, deixa tentar somente mais uma vez
 				scanf("%s", senha);
 				if(strcmp(senha, senha_correto) == 0){
 					printf("Voce logou\n");
-					return 1;
+					return posicao;
 				}
 				else{
 					printf("Voce digitou a senha incorreta mais de uma vez, encerrando...\n");
-					return 0;
+					return -1;
 				}
 			}
 		}
 		else{
 			fscanf(fp, "%[^\r\n]", ignora); //Se o login nao e o desejado precisamos ignorar a senha que vem a frente
 			fscanf(fp, "%*c"); //Ignora o '\n'
+			posicao++;
 		}
 		memset(login_correto, '\0', 100); //Reseta os valores
 		memset(senha_correto, '\0', 10);
@@ -202,6 +204,51 @@ int printaLogin(Dados **lido){
 
 }
 
+int procuraSolicitado(Dados **lido, char solicitacao[100]){
+	for(int i = 0; i < quantidade_registros; i++){
+		if(strcmp(lido[i]->usuario, solicitacao) == 0){
+			return i;
+		}
+	}
+	return -1;
+}
+
+void verificaSolicitacoes(Grafo *G, int usuario){
+
+
+
+}
+
+void printaMenu(Grafo *G, Dados **lido, int usuario){
+
+	int operacao;
+	int tipo;
+	char arquivo[103];
+	char solicitacao[100];
+	memset(solicitacao, '\0', 100);
+	memset(arquivo, '\0', 103);
+	strcpy(arquivo, lido[usuario]->usuario);
+	arquivo[strlen(arquivo)] = '.';
+	arquivo[strlen(arquivo)] = 't';
+	arquivo[strlen(arquivo)] = 'x';
+	arquivo[strlen(arquivo)] = 't';
+
+	scanf("%d", &operacao);
+
+	switch (operacao){
+	case 1:
+		scanf("%s", solicitacao);
+		int solicitado = procuraSolicitado(lido, solicitacao);
+		tipo = 0;
+		FILE *realizadas = fopen(arquivo, "a+");
+		fprintf(realizadas, "%d\n", solicitado);
+		imprime_grafo(G);
+		break;
+	case 2:
+		verificaSolicitacoes(G, usuario);
+		break;
+	}
+}
 
 int main(void){
 
@@ -216,9 +263,11 @@ int main(void){
 	}
 	leArquivo(arquivo, lido);
 	usuario_logado = printaLogin(lido);
+	Grafo *G = criar_grafo(&quantidade_registros);
+	imprime_grafo(G);
 
-	if(usuario_logado){
-		//TODO: PRINTA MENU DO USUARIO (TRABALHO)
+	if(usuario_logado != -1){
+		printaMenu(G, lido, usuario_logado);
 	}
 
 	for(int i = 0; i < 100; i++){
