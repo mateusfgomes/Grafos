@@ -93,6 +93,10 @@ void remover_aresta(Grafo *G, int *v1, int *v2, int *erro, elem *P){
 
 }
 
+int numero_vertices(Grafo *G){
+	return G->NumVertices;
+}
+
 void imprime_grafo(Grafo *G){
 
 	noAresta* aux;

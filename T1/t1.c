@@ -213,40 +213,138 @@ int procuraSolicitado(Dados **lido, char solicitacao[100]){
 	return -1;
 }
 
-void verificaSolicitacoes(Grafo *G, int usuario){
+int *verificaSolicitacoes(Grafo *G, Dados **lido, int usuario){
 
-
-
-}
-
-void printaMenu(Grafo *G, Dados **lido, int usuario){
-
-	int operacao;
-	int tipo;
 	char arquivo[103];
-	char solicitacao[100];
-	memset(solicitacao, '\0', 100);
+	int aux, i = 0;
+	int *total_solicitacoes = malloc(numero_vertices(G) * sizeof(int));
+	FILE *fp;
 	memset(arquivo, '\0', 103);
+
 	strcpy(arquivo, lido[usuario]->usuario);
 	arquivo[strlen(arquivo)] = '.';
 	arquivo[strlen(arquivo)] = 't';
 	arquivo[strlen(arquivo)] = 'x';
 	arquivo[strlen(arquivo)] = 't';
 
-	scanf("%d", &operacao);
+	fp = fopen(arquivo, "r");
 
-	switch (operacao){
-	case 1:
-		scanf("%s", solicitacao);
-		int solicitado = procuraSolicitado(lido, solicitacao);
-		tipo = 0;
-		FILE *realizadas = fopen(arquivo, "a+");
-		fprintf(realizadas, "%d\n", solicitado);
-		imprime_grafo(G);
-		break;
-	case 2:
-		verificaSolicitacoes(G, usuario);
-		break;
+	while(fscanf(fp, "%d", &aux) != EOF){
+		total_solicitacoes[i] = aux;
+		i++;
+	}
+	return total_solicitacoes;
+}
+
+void bubbleSort (int *vetor, int n_elementos) {
+    int k, j, aux;
+    for (k = 1; k < n_elementos; k++) {
+        for (j = 0; j < n_elementos - 1; j++) {
+            if (vetor[j] > vetor[j + 1]) {
+                aux  = vetor[j];
+                vetor[j] = vetor[j + 1];
+                vetor[j + 1] = aux;
+            }
+        }
+    }
+}
+
+int buscaBinaria(int *vetor, int inicio, int fim, int chave) { 
+    if (fim >= inicio) { 
+        int meio = inicio + (fim - inicio) / 2; 
+  
+        if (vetor[meio] == chave) 
+            return meio; 
+  
+        if (vetor[meio] > chave) 
+            return buscaBinaria(vetor, inicio, meio - 1, chave); 
+
+        return buscaBinaria(vetor, meio + 1, fim, chave); 
+    } 
+
+    return -1; 
+} 
+
+int verificaJaFeitas(Grafo* G, FILE *realizadas, int chave){
+
+	int aux, i = 0;
+	int *total_solicitacoes = malloc(numero_vertices(G) * sizeof(int));
+	while(fscanf(realizadas, "%d", &aux) != EOF){
+		total_solicitacoes[i] = aux;
+		i++;
+	}
+	
+	if(i > 0){ 
+		bubbleSort(total_solicitacoes, i);
+		return buscaBinaria(total_solicitacoes, 0 , i-1, chave);
+	}
+
+	return 0;
+}
+
+void printaMenu(Grafo *G, Dados **lido, int *usuario){
+
+	int operacao;
+	int tipo;
+	int *solicitacoes_recebidas;
+	char arquivo[103];
+	char solicitacao[100];
+	memset(solicitacao, '\0', 100);
+	memset(arquivo, '\0', 103);
+	printf("=======================BEM VINDO====================\n");
+
+	printf("Operacoes que podem ser realizadas:\n");
+	printf("1 - Fazer solicitacao\n");
+	printf("2 - Ver solicitacoes recebidas\n");
+	printf("3 - Fazer Logoff\n");
+	printf("4 - Sair\n");
+
+	scanf("%d", &operacao);
+	while(operacao != 4){
+		memset(solicitacao, '\0', 100);
+		memset(arquivo, '\0', 103);
+		switch(operacao){
+		case 1:
+			printf("Para quem voce deseja enviar a solicitacao: ");
+			scanf("%s", solicitacao);
+			strcpy(arquivo, solicitacao);
+			arquivo[strlen(arquivo)] = '.';
+			arquivo[strlen(arquivo)] = 't';
+			arquivo[strlen(arquivo)] = 'x';
+			arquivo[strlen(arquivo)] = 't';
+			int solicitado = procuraSolicitado(lido, solicitacao);
+			printf("aa%d\n", solicitado);
+			tipo = 0;
+			FILE *realizadas = fopen(arquivo, "a+");
+			if(verificaJaFeitas(G, realizadas, solicitado) == -1){
+				printf("Solicitacao ja realizada!\n");
+			}
+			else{
+				fprintf(realizadas, "%d\n", *usuario);
+				printf("Solicitacao realizada com sucesso!\n");
+			}
+			fclose(realizadas);
+			break;
+		case 2:
+			solicitacoes_recebidas = verificaSolicitacoes(G, lido, *usuario);
+			printf("==================Solicitacoes===================\n");
+			printf("Numero de solicitacoes: %d\n", numero_vertices(G));
+			for(int i = 0; i < numero_vertices(G); i++){
+				printf("Solicitação %d: %s\n", i, lido[solicitacoes_recebidas[i]]->usuario);
+			}
+			free(solicitacoes_recebidas);
+			break;
+		case 3:
+			*usuario = printaLogin(lido);
+			break;
+		}
+		
+		printf("Operacoes que podem ser realizadas:\n");
+		printf("1 - Fazer solicitacao\n");
+		printf("2 - Ver solicitacoes recebidas\n");
+		printf("3 - Fazer Logoff\n");
+		printf("4 - Sair\n");
+		scanf("%d", &operacao);
 	}
 }
 
@@ -267,7 +365,7 @@ int main(void){
 	imprime_grafo(G);
 
 	if(usuario_logado != -1){
-		printaMenu(G, lido, usuario_logado);
+		printaMenu(G, lido, &usuario_logado);
 	}
 
 	for(int i = 0; i < 100; i++){

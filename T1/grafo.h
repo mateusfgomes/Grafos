@@ -11,6 +11,7 @@ typedef struct no_vertice noVertice;
 
 Grafo* criar_grafo(int* nVertices);
 void inserir_aresta(Grafo *G, int *v1, int *v2, elem *P);
+int numero_vertices(Grafo *G);
 void remover_aresta(Grafo *G, int *v1, int *v2, int *erro, elem *P);
 void imprime_grafo(Grafo *G);
 double compara_grafos(Grafo* G1, Grafo* G2, int n_arestas1, int n_arestas2);
