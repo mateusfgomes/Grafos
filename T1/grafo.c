@@ -66,6 +66,19 @@ void inserir_aresta(Grafo *G, int *v1, int *v2, elem *P){
 	}
 }
 
+void inserir_aresta_direcionado(Grafo *G, int *v1, int *v2, elem *P){
+	if((*v1 >= G->NumVertices) || (*v2 >= G->NumVertices))
+		return;
+	else{
+		G->Adj[*v1].fim->prox = (noAresta*) malloc(sizeof(noAresta));
+		G->Adj[*v1].fim = G->Adj[*v1].fim->prox;
+		G->Adj[*v1].fim->v = *v2;									//GRAFO DIRECIONADO
+		G->Adj[*v1].fim->peso = *P;
+		G->Adj[*v1].fim->prox = NULL;
+	}
+}
+
+
 void remover_aresta(Grafo *G, int *v1, int *v2, int *erro, elem *P){
 	if((*v1 >= G->NumVertices) || (*v2 >= G->NumVertices))
 		*erro = 1;
@@ -356,7 +369,20 @@ int *percorre_lista_pares(int vertice, Grafo *G, int *quantidade_valores){
 
 	//Dar free
 	return maiores_valores;
+}
 
+int procura_amigo(Grafo *G, int busca, int vertice){
+
+	noAresta *aux;
+	aux = G->Adj[vertice].ini->prox;
+	
+	while(aux != NULL){
+		if(aux->v == busca){
+			return 1;
+		}
+		aux = aux->prox;
+	}
+	return 0;
 }
 
 void salvaGrafo(Grafo *G, FILE *salvar){
@@ -372,5 +398,21 @@ void salvaGrafo(Grafo *G, FILE *salvar){
 			aux = aux->prox;
 		}
 	}
+	fprintf(salvar, "-");
+}
 
+int *imprime_adjacencias(Grafo *G, int vertice, int *numero_adjacencias){
+
+	noAresta *aux = G->Adj[vertice].ini->prox;
+	int *adjacencias = (int*) malloc(numero_vertices(G)*sizeof(int));
+	*numero_adjacencias = 0;
+	
+	while(aux != NULL){
+		adjacencias[*numero_adjacencias] = aux->v;
+		(*numero_adjacencias)++;
+		aux = aux->prox;
+	}
+	
+	//Dar free
+	return adjacencias;
 }

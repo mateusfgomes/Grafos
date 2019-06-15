@@ -29,6 +29,9 @@ noAresta* primeirolistaadj(Grafo *gr, int v);
 int *percorre_lista_reducoes(int vertice, Grafo *G, int *quantidade_valores);
 int *percorre_lista_pares(int vertice, Grafo *G, int *quantidade_valores);
 void salvaGrafo(Grafo *G, FILE *salvar);
+int procura_amigo(Grafo *G, int busca, int vertice);
+void inserir_aresta_direcionado(Grafo *G, int *v1, int *v2, elem *P);
+int *imprime_adjacencias(Grafo *G, int vertice, int *numero_adjacencias);
 
 
 #endif

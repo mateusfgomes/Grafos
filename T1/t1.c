@@ -70,6 +70,8 @@ int copiaAtual(Dados *receber){
 	strcpy(receber->cidade, atual->cidade);
 	strcpy(receber->filme_fav, atual->filme_fav);
 	strcpy(receber->time, atual->time);
+	strcpy(receber->sexo, atual->sexo);
+	strcpy(receber->interesse, atual->interesse);
 	strcpy(receber->cor, atual->cor);
 
 }
@@ -287,10 +289,18 @@ int buscaBinaria(int *vetor, int inicio, int fim, int chave) {
     return -1; 
 } 
 
-int verificaJaFeitas(Grafo* G, FILE *realizadas, int chave){
+int verificaJaFeitas(Grafo* G, FILE *realizadas, int chave, int solicitado){
 
-	int aux, i = 0;
+	int aux, i = 0;	
+	int eh_amigo;
+
 	int *total_solicitacoes = malloc(numero_vertices(G) * sizeof(int));
+	
+	eh_amigo = procura_amigo(G, chave, solicitado);
+	if(eh_amigo){
+		return -2;
+	}
+
 	while(fscanf(realizadas, "%d", &aux) != EOF){
 		total_solicitacoes[i] = aux;
 		i++;
@@ -307,6 +317,7 @@ int verificaJaFeitas(Grafo* G, FILE *realizadas, int chave){
 void mostraSugestoes(int usuario, Dados **lido, Grafo *G){
 	
 	double match = 0;
+	int flagprint = 0;
 
 	//Busca sugestoes em toda a rede
 	for(int i = 0; i < numero_vertices(G); i++){
@@ -326,10 +337,16 @@ void mostraSugestoes(int usuario, Dados **lido, Grafo *G){
 			match += 0.1;
 		}
 
-		if(match > 0.7){
+		if(match > 0.7 && !procura_amigo(G, i, usuario)){
 			printf("Pessoa sugerida: %s\n", lido[i]->usuario);
+			flagprint = 1;
 		}
 		match = 0;
+	}
+
+	if(flagprint == 0){
+		printf("Nao ha' sugestoes para voce no momento\n");
+		flagprint = 0;
 	}
 
 }
@@ -339,8 +356,8 @@ double calculaMatch(Dados **lido, int a, int b){
 	double match = 0;
 
 	if(strcmp(lido[a]->cidade, lido[b]->cidade) == 0){
-			match += 0.1;
-		}
+		match += 0.1;
+	}
 	if(strcmp(lido[a]->cor, lido[b]->cor) == 0){
 		match += 0.1;
 	}
@@ -420,14 +437,38 @@ void encontraPares(int usuario, Dados **lido, Grafo *G){
 
 	int *pares;
 	int quantidade_pares;
+	int flagprint = 0;
 
 	pares = percorre_lista_pares(usuario, G, &quantidade_pares);
 
 	for(int i = 0; i <quantidade_pares; i++){
-		printf("Possivel Par: %s\n", lido[pares[i]]->usuario);
+		if(strcmp(lido[pares[i]]->sexo, lido[usuario]->interesse) == 0){
+			printf("Possivel Par: %s\n", lido[pares[i]]->usuario);
+			flagprint = 1;
+		}
+	}
+
+	if(!flagprint){
+		printf("Nao ha possiveis pares!\n");
 	}
 
 	free(pares);
+
+}
+
+void listarAmigos(Grafo *G, int usuario, Dados **lido){
+	
+	int *amigos;
+	int quantidade_amigos;
+
+	amigos = imprime_adjacencias(G, usuario, &quantidade_amigos);
+
+	for(int i = 0; i < quantidade_amigos; i++){
+		printf("%s\n", lido[amigos[i]]->usuario);
+	}
+
+	if(quantidade_amigos == 0)
+		printf("Voce nao tem amigos!\n");
 
 }
 
@@ -449,10 +490,11 @@ void printaMenu(Grafo *G, Dados **lido, int *usuario){
 	printf("4 - Mostrar Sugestoes\n");
 	printf("5 - Eliminar Inimigos\n");
 	printf("6 - Encontrar par(es)\n");
-	printf("7 - Sair\n");
+	printf("7 - Listar Amigos\n");
+	printf("8 - Sair\n");
 
 	scanf("%d", &operacao);
-	while(operacao != 7){
+	while(operacao != 8){
 		memset(solicitacao, '\0', 100);
 		memset(arquivo, '\0', 103);
 		switch(operacao){
@@ -466,9 +508,12 @@ void printaMenu(Grafo *G, Dados **lido, int *usuario){
 			arquivo[strlen(arquivo)] = 't';
 			int solicitado = procuraSolicitado(lido, solicitacao);
 			FILE *realizadas = fopen(arquivo, "a+");
-			if(verificaJaFeitas(G, realizadas, *usuario) == -1){
+			if(verificaJaFeitas(G, realizadas, *usuario, solicitado) == -1){
 				fprintf(realizadas, "%d\n", *usuario);
 				printf("Solicitacao realizada com sucesso!\n");
+			}
+			else if(verificaJaFeitas(G, realizadas, *usuario, solicitado) == -2){
+				printf("Esse usuario ja e' seu amigo!\n");
 			}
 			else{
 				printf("Solicitacao ja realizada!\n");
@@ -520,6 +565,11 @@ void printaMenu(Grafo *G, Dados **lido, int *usuario){
 		case 6:
 			printf("Encontrando par(es):\n");
 			encontraPares(*usuario, lido, G);
+			break;
+		case 7:
+			printf("Sua lista de amigos:\n");
+			listarAmigos(G, *usuario, lido);
+			break;
 		}
 		
 		printf("Operacoes que podem ser realizadas:\n");
@@ -529,14 +579,47 @@ void printaMenu(Grafo *G, Dados **lido, int *usuario){
 		printf("4 - Mostrar Sugestoes\n");
 		printf("5 - Eliminar inimigos\n");
 		printf("6 - Encontrar par(es)\n");
-		printf("7 - Sair\n");
+		printf("7 - Listar amigos\n");
+		printf("8 - Sair\n");
 		scanf("%d", &operacao);
 	}
 }
 
 void salvaDados(Grafo *G, FILE *salvar){
-
 	salvaGrafo(G, salvar);
+}
+
+void carregaDados(FILE *salvo, Grafo *G, int n_registros, Dados **lido){
+
+	char teste, teste2;
+	int usuario;
+	int amigos[n_registros];
+	double afinidade[n_registros];
+	for(int h = 0; h < n_registros; h++){
+		amigos[h] = 0;
+		afinidade[h] = 0;
+	}
+	int i = 0;
+
+	while(fscanf(salvo, "%c\n", &teste) != EOF){
+		if(teste == '-'){
+			fscanf(salvo, "%d\n", &usuario);
+		}
+		else{
+			while(teste2 != '-'){
+				fseek(salvo, -1, SEEK_CUR);
+				fscanf(salvo, "%d,%lf\n", &amigos[i], &afinidade[i]);
+				fscanf(salvo, "%c", &teste2);
+				i++;
+			}
+			fseek(salvo, -1, SEEK_CUR);
+			teste2 = '\0';
+		}
+		for(int j = 0; j < i; j++){
+			inserir_aresta_direcionado(G, &usuario, &amigos[j], &afinidade[j]);
+		}
+		i = 0;
+	}
 
 }
 
@@ -545,7 +628,8 @@ int main(void){
 	int usuario_logado;
 
 	FILE *arquivo = fopen("dados.txt", "r");
-	FILE *salvar = fopen("salvo.txt", "w");
+	FILE *carregar = fopen("salvo.txt", "r");
+
 	atual = (Dados*) malloc(sizeof(Dados));
 
 	Dados **lido = (Dados**) malloc(100*sizeof(Dados*));
@@ -555,11 +639,19 @@ int main(void){
 	leArquivo(arquivo, lido);
 	usuario_logado = printaLogin(lido);
 	Grafo *G = criar_grafo(&quantidade_registros);
+	
+	if(carregar != NULL){
+		carregaDados(carregar, G, quantidade_registros, lido);
+		fclose(carregar);
+	}
+	
 	imprime_grafo(G);
 
 	if(usuario_logado != -1){
 		printaMenu(G, lido, &usuario_logado);
 	}
+
+	FILE *salvar = fopen("salvo.txt", "w");
 
 	salvaDados(G, salvar);
 

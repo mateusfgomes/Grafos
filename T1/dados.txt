@@ -3,6 +3,8 @@ idade: 19
 cidade: Sao Carlos
 filme predileto: vingadores
 time: palmeiras
+sexo: masculino
+interessado em: feminino
 cor predileta: azul
 
 nome do usuario: ciclano
@@ -10,6 +12,8 @@ idade: 21
 cidade: Delfinopolis
 filme predileto: prometheus
 time: sao caetano
+sexo: masculino
+interessado em: masculino
 cor predileta: branco
 
 nome do usuario: tijuano
@@ -17,6 +21,8 @@ idade: 15
 cidade: Divinopolis
 filme predileto: em busca da felicidade
 time: corinthians
+sexo: masculino
+interessado em: feminino
 cor predileta: verde
 
 nome do usuario: claine
@@ -24,6 +30,8 @@ idade: 29
 cidade: Sao Roque de Minas
 filme predileto: ate o ultimo homem
 time: sao caetano
+sexo: feminino
+interessado em: masculino
 cor predileta: branco
 
 nome do usuario: marcia
@@ -31,6 +39,8 @@ idade: 45
 cidade: Ribeirao Preto
 filme predileto: star wars
 time: palmeiras
+sexo: feminino
+interessado em: masculino
 cor predileta: preto
 
 nome do usuario: heiner
@@ -38,6 +48,8 @@ idade: 43
 cidade: Ribeirao Preto
 filme predileto: star wars
 time: palmeiras
+sexo: masculino
+interessado em: masculino
 cor predileta: preto
 
 nome do usuario: marcos
@@ -45,6 +57,8 @@ idade: 12
 cidade: Franca
 filme predileto: a cinco passos de voce
 time: sao paulo
+sexo: masculino
+interessado em: feminino
 cor predileta: azul
 
 nome do usuario: jackson
@@ -52,4 +66,6 @@ idade: 20
 cidade: Sao Paulo
 filme predileto: prometheus
 time: sao caetano
+sexo: masculino
+interessado em: feminino
 cor predileta: branco
