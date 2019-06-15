@@ -7,7 +7,49 @@ cor predileta: azul
 
 nome do usuario: ciclano
 idade: 21
-cidade: Sao Carlos
+cidade: Delfinopolis
+filme predileto: prometheus
+time: sao caetano
+cor predileta: branco
+
+nome do usuario: tijuano
+idade: 15
+cidade: Divinopolis
+filme predileto: em busca da felicidade
+time: corinthians
+cor predileta: verde
+
+nome do usuario: claine
+idade: 29
+cidade: Sao Roque de Minas
+filme predileto: ate o ultimo homem
+time: sao caetano
+cor predileta: branco
+
+nome do usuario: marcia
+idade: 45
+cidade: Ribeirao Preto
+filme predileto: star wars
+time: palmeiras
+cor predileta: preto
+
+nome do usuario: heiner
+idade: 43
+cidade: Ribeirao Preto
+filme predileto: star wars
+time: palmeiras
+cor predileta: preto
+
+nome do usuario: marcos
+idade: 12
+cidade: Franca
+filme predileto: a cinco passos de voce
+time: sao paulo
+cor predileta: azul
+
+nome do usuario: jackson
+idade: 20
+cidade: Sao Paulo
 filme predileto: prometheus
 time: sao caetano
 cor predileta: branco

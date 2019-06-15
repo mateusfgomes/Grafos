@@ -2,8 +2,9 @@
 #define GRAFO_H
 #define MAXNUMVERTICES 100
 #define SEM_ARESTA 0
+#include <stdio.h>
 
-typedef int elem;
+typedef double elem;
 typedef struct grafo_ Grafo;
 
 typedef struct no_aresta noAresta;
@@ -25,5 +26,9 @@ void caminho(int u, int v, int antecessor[]);
 void visita_bfs(Grafo* G, int v, int distancia[], int cor[], int antecessor[]);
 void proxadj(Grafo *gr, noAresta **Adj, int *fimlistaadj);
 noAresta* primeirolistaadj(Grafo *gr, int v);
+int *percorre_lista_reducoes(int vertice, Grafo *G, int *quantidade_valores);
+int *percorre_lista_pares(int vertice, Grafo *G, int *quantidade_valores);
+void salvaGrafo(Grafo *G, FILE *salvar);
+
 
 #endif

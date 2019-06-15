@@ -104,7 +104,7 @@ void imprime_grafo(Grafo *G){
 		printf("%d - ", i);
 		aux = G->Adj[i].ini->prox;
 		while(aux != NULL){
-			printf("(%d)%d ", aux->peso, aux->v);
+			printf("(%lf)%d ", aux->peso, aux->v);
 			aux = aux->prox;
 		}
 		printf("\n");
@@ -312,3 +312,65 @@ void bfs(Grafo* G){
 
 }
 
+int *percorre_lista_reducoes(int vertice, Grafo *G, int *quantidade_valores){
+
+	int *menores_valores = malloc(sizeof(int)*numero_vertices(G));
+	int i = 0;
+	noAresta *aux;
+
+	aux = G->Adj[vertice].ini->prox;
+
+	while(aux != NULL){
+		if(aux->peso < 0.3){
+			menores_valores[i] = aux->v;
+			i++;
+		}
+		aux = aux->prox;
+	}
+
+	*quantidade_valores = i;
+
+	//Dar free
+	return menores_valores;
+
+}
+
+
+int *percorre_lista_pares(int vertice, Grafo *G, int *quantidade_valores){
+
+	int *maiores_valores = malloc(sizeof(int)*numero_vertices(G));
+	int i = 0;
+	noAresta *aux;
+
+	aux = G->Adj[vertice].ini->prox;
+
+	while(aux != NULL){
+		if(aux->peso > 0.80){
+			maiores_valores[i] = aux->v;
+			i++;
+		}
+		aux = aux->prox;
+	}
+
+	*quantidade_valores = i;
+
+	//Dar free
+	return maiores_valores;
+
+}
+
+void salvaGrafo(Grafo *G, FILE *salvar){
+
+	noAresta *aux;
+
+	for(int i = 0; i < numero_vertices(G); i++){
+		fprintf(salvar, "-\n");
+		fprintf(salvar, "%d\n", i);
+		aux = G->Adj[i].ini->prox;
+		while(aux != NULL){
+			fprintf(salvar, "%d,%lf\n", aux->v, aux->peso);
+			aux = aux->prox;
+		}
+	}
+
+}

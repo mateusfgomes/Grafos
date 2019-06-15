@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "grafo.h"
 #include "dados.h"
+
 
 /**
  * Estrutura de um usuario
@@ -14,6 +16,8 @@ typedef struct Dados_{
     char time[100];
     char cor[100];
     char senha[100];
+	char sexo[100];
+	char interesse[100];
     int idade;
 }Dados;
 
@@ -104,6 +108,16 @@ int leArquivo(FILE* arquivo, Dados **lido){
 			else if(strcmp(tag, "time") == 0){
 				fscanf(arquivo, "%*c");
 				fscanf(arquivo, "%[^\n\r]", atual->time);
+				fscanf(arquivo, "%*c");
+			}
+			else if(strcmp(tag, "sexo") == 0){
+				fscanf(arquivo, "%*c");
+				fscanf(arquivo, "%[^\n\r]", atual->sexo);
+				fscanf(arquivo, "%*c");
+			}
+			else if(strcmp(tag, "interessado em") == 0){
+				fscanf(arquivo, "%*c");
+				fscanf(arquivo, "%[^\n\r]", atual->interesse);
 				fscanf(arquivo, "%*c");
 			}
 			else if(strcmp(tag, "cor predileta") == 0){
@@ -213,7 +227,7 @@ int procuraSolicitado(Dados **lido, char solicitacao[100]){
 	return -1;
 }
 
-int *verificaSolicitacoes(Grafo *G, Dados **lido, int usuario){
+int *verificaSolicitacoes(Grafo *G, Dados **lido, int usuario, int *quantidade_solicitacoes){
 
 	char arquivo[103];
 	int aux, i = 0;
@@ -229,10 +243,18 @@ int *verificaSolicitacoes(Grafo *G, Dados **lido, int usuario){
 
 	fp = fopen(arquivo, "r");
 
+	if(fp == NULL){
+		*quantidade_solicitacoes = 0;
+		return NULL;		
+	}
+
 	while(fscanf(fp, "%d", &aux) != EOF){
 		total_solicitacoes[i] = aux;
 		i++;
 	}
+
+	*quantidade_solicitacoes = i;
+
 	return total_solicitacoes;
 }
 
@@ -276,17 +298,144 @@ int verificaJaFeitas(Grafo* G, FILE *realizadas, int chave){
 	
 	if(i > 0){ 
 		bubbleSort(total_solicitacoes, i);
-		return buscaBinaria(total_solicitacoes, 0 , i-1, chave);
+		return buscaBinaria(total_solicitacoes, 0 , i, chave);
 	}
 
-	return 0;
+	return -1;
+}
+
+void mostraSugestoes(int usuario, Dados **lido, Grafo *G){
+	
+	double match = 0;
+
+	//Busca sugestoes em toda a rede
+	for(int i = 0; i < numero_vertices(G); i++){
+		if(i != usuario && strcmp(lido[i]->cidade, lido[usuario]->cidade) == 0){
+			match += 0.1;
+		}
+		if(i != usuario && strcmp(lido[i]->cor, lido[usuario]->cor) == 0){
+			match += 0.1;
+		}
+		if(i != usuario && strcmp(lido[i]->filme_fav, lido[usuario]->filme_fav) == 0){
+			match += 0.3;
+		}
+		if(i != usuario && abs(lido[i]->idade - lido[usuario]->idade) < 3){
+			match += 0.4;
+		}
+		if(i != usuario && strcmp(lido[i]->time, lido[usuario]->time) == 0){
+			match += 0.1;
+		}
+
+		if(match > 0.7){
+			printf("Pessoa sugerida: %s\n", lido[i]->usuario);
+		}
+		match = 0;
+	}
+
+}
+
+double calculaMatch(Dados **lido, int a, int b){
+
+	double match = 0;
+
+	if(strcmp(lido[a]->cidade, lido[b]->cidade) == 0){
+			match += 0.1;
+		}
+	if(strcmp(lido[a]->cor, lido[b]->cor) == 0){
+		match += 0.1;
+	}
+	if(strcmp(lido[a]->filme_fav, lido[b]->filme_fav) == 0){
+		match += 0.3;
+	}
+	if(abs(lido[a]->idade - lido[b]->idade) < 3){
+		match += 0.4;
+	}
+	if(strcmp(lido[a]->time, lido[b]->time) == 0){
+		match += 0.1;
+	}
+
+
+	return match;
+
+}
+
+int aceitarSolicitacoes(Dados **lido, int *solicitacoes_recebidas, int usuario, Grafo *G){
+
+	int escolha;
+	char teste;
+
+	printf("Digite o numero da solicitacao que voce deseja aceitar: ");
+	scanf("%d", &escolha);
+
+	double proximidade = calculaMatch(lido, solicitacoes_recebidas[escolha], usuario);
+
+	printf("Chances da amizande escolhida ser verdadeira: %.1lf%%\n", proximidade*100);
+	printf("Deseja aceitar?[s/n]\n");
+	scanf("%*c");
+	scanf("%c", &teste);
+	if(teste == 's'){
+		inserir_aresta(G, &solicitacoes_recebidas[escolha], &usuario, &proximidade);
+	}
+	else{
+		return -1;
+	}
+
+	return escolha;
+}
+
+void removeSolicitacao(Dados **lido, int *solicitacoes, int quantidade_solicitacoes, int usuario){
+
+	FILE *fp;
+	char arquivo[103];
+	memset(arquivo, '\0', 103);
+
+	strcpy(arquivo, lido[usuario]->usuario);
+	arquivo[strlen(arquivo)] = '.';
+	arquivo[strlen(arquivo)] = 't';
+	arquivo[strlen(arquivo)] = 'x';
+	arquivo[strlen(arquivo)] = 't';
+
+	fp = fopen(arquivo, "w");
+
+	for(int i = 0; i < quantidade_solicitacoes; i++){
+		fprintf(fp,"%d\n",solicitacoes[i]);
+	}
+}
+
+void mostraReducoes(int usuario, Dados **lido, Grafo *G){
+
+	int *reducoes;
+	int quantidade_reducoes;
+
+	reducoes = percorre_lista_reducoes(usuario, G, &quantidade_reducoes);
+
+	for(int i = 0; i <quantidade_reducoes; i++){
+		printf("Amigo desnecessario: %s\n", lido[reducoes[i]]->usuario);
+	}
+
+	free(reducoes);
+}
+
+void encontraPares(int usuario, Dados **lido, Grafo *G){
+
+	int *pares;
+	int quantidade_pares;
+
+	pares = percorre_lista_pares(usuario, G, &quantidade_pares);
+
+	for(int i = 0; i <quantidade_pares; i++){
+		printf("Possivel Par: %s\n", lido[pares[i]]->usuario);
+	}
+
+	free(pares);
+
 }
 
 void printaMenu(Grafo *G, Dados **lido, int *usuario){
 
 	int operacao;
-	int tipo;
 	int *solicitacoes_recebidas;
+	int quantidade_solicitacoes;
 	char arquivo[103];
 	char solicitacao[100];
 	memset(solicitacao, '\0', 100);
@@ -297,10 +446,13 @@ void printaMenu(Grafo *G, Dados **lido, int *usuario){
 	printf("1 - Fazer solicitacao\n");
 	printf("2 - Ver solicitacoes recebidas\n");
 	printf("3 - Fazer Logoff\n");
-	printf("4 - Sair\n");
+	printf("4 - Mostrar Sugestoes\n");
+	printf("5 - Eliminar Inimigos\n");
+	printf("6 - Encontrar par(es)\n");
+	printf("7 - Sair\n");
 
 	scanf("%d", &operacao);
-	while(operacao != 4){
+	while(operacao != 7){
 		memset(solicitacao, '\0', 100);
 		memset(arquivo, '\0', 103);
 		switch(operacao){
@@ -313,39 +465,79 @@ void printaMenu(Grafo *G, Dados **lido, int *usuario){
 			arquivo[strlen(arquivo)] = 'x';
 			arquivo[strlen(arquivo)] = 't';
 			int solicitado = procuraSolicitado(lido, solicitacao);
-			printf("aa%d\n", solicitado);
-			tipo = 0;
 			FILE *realizadas = fopen(arquivo, "a+");
-			if(verificaJaFeitas(G, realizadas, solicitado) == -1){
-				printf("Solicitacao ja realizada!\n");
-			}
-			else{
+			if(verificaJaFeitas(G, realizadas, *usuario) == -1){
 				fprintf(realizadas, "%d\n", *usuario);
 				printf("Solicitacao realizada com sucesso!\n");
+			}
+			else{
+				printf("Solicitacao ja realizada!\n");
 			}
 			fclose(realizadas);
 			break;
 		case 2:
-			solicitacoes_recebidas = verificaSolicitacoes(G, lido, *usuario);
+			solicitacoes_recebidas = verificaSolicitacoes(G, lido, *usuario, &quantidade_solicitacoes);
 			printf("==================Solicitacoes===================\n");
-			printf("Numero de solicitacoes: %d\n", numero_vertices(G));
-			for(int i = 0; i < numero_vertices(G); i++){
+			if(solicitacoes_recebidas != NULL && quantidade_solicitacoes != 0) 
+				printf("Numero de solicitacoes: %d\n", quantidade_solicitacoes);
+			else
+				printf("Nao ha solicitacoes\n");
+			for(int i = 0; i < quantidade_solicitacoes; i++){
 				printf("Solicitação %d: %s\n", i, lido[solicitacoes_recebidas[i]]->usuario);
+			}
+			if(quantidade_solicitacoes > 0){
+				char teste;
+				printf("Deseja aceitar alguma solicitacao?[s/n]\n");
+				scanf("%*c");
+				scanf("%c", &teste);
+				if(teste == 's'){
+					int escolha = aceitarSolicitacoes(lido, solicitacoes_recebidas, *usuario, G);
+					if(escolha == -1){
+						printf("Operacao cancelada\n");
+						free(solicitacoes_recebidas);
+						break;
+					}
+					solicitacoes_recebidas[escolha] = solicitacoes_recebidas[quantidade_solicitacoes - 1];
+					quantidade_solicitacoes--;
+					removeSolicitacao(lido, solicitacoes_recebidas, quantidade_solicitacoes,*usuario);			
+					printf("Solicitacao Aceita!\n");		
+				}
 			}
 			free(solicitacoes_recebidas);
 			break;
 		case 3:
+			printf("Logoff realizado!\n");
 			*usuario = printaLogin(lido);
 			break;
+		case 4:
+			printf("Suas sugestoes de amizades:\n");
+			mostraSugestoes(*usuario, lido, G);
+			break;
+		case 5:
+			printf("Mostrando Reducoes\n");
+			mostraReducoes(*usuario, lido, G);
+			break;
+		case 6:
+			printf("Encontrando par(es):\n");
+			encontraPares(*usuario, lido, G);
 		}
 		
 		printf("Operacoes que podem ser realizadas:\n");
 		printf("1 - Fazer solicitacao\n");
 		printf("2 - Ver solicitacoes recebidas\n");
 		printf("3 - Fazer Logoff\n");
-		printf("4 - Sair\n");
+		printf("4 - Mostrar Sugestoes\n");
+		printf("5 - Eliminar inimigos\n");
+		printf("6 - Encontrar par(es)\n");
+		printf("7 - Sair\n");
 		scanf("%d", &operacao);
 	}
+}
+
+void salvaDados(Grafo *G, FILE *salvar){
+
+	salvaGrafo(G, salvar);
+
 }
 
 int main(void){
@@ -353,6 +545,7 @@ int main(void){
 	int usuario_logado;
 
 	FILE *arquivo = fopen("dados.txt", "r");
+	FILE *salvar = fopen("salvo.txt", "w");
 	atual = (Dados*) malloc(sizeof(Dados));
 
 	Dados **lido = (Dados**) malloc(100*sizeof(Dados*));
@@ -367,6 +560,8 @@ int main(void){
 	if(usuario_logado != -1){
 		printaMenu(G, lido, &usuario_logado);
 	}
+
+	salvaDados(G, salvar);
 
 	for(int i = 0; i < 100; i++){
 		free(lido[i]);
