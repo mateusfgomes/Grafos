@@ -35,6 +35,8 @@ void imprimeAtual(){
 	printf("Cidade: %s\n", atual->cidade);
 	printf("Filme Favorito: %s\n", atual->filme_fav);
 	printf("Time: %s\n", atual->time);
+	printf("Sexo: %s\n", atual->sexo);
+	printf("Interessado no sexo: %s\n", atual->interesse);	
 	printf("Cor Favorita: %s\n", atual->cor);
 	printf("\n");
 
@@ -74,7 +76,22 @@ int copiaAtual(Dados *receber){
 	strcpy(receber->interesse, atual->interesse);
 	strcpy(receber->cor, atual->cor);
 
+	
 }
+
+
+int copiaparaAtual(Dados *receber){
+
+	strcpy(atual->usuario, receber->usuario);
+	atual->idade = receber->idade;
+	strcpy(atual->cidade, receber->cidade);
+	strcpy(atual->filme_fav, receber->filme_fav);
+	strcpy(atual->time, receber->time);
+	strcpy(atual->sexo, receber->sexo);
+	strcpy(atual->interesse, receber->interesse);
+	strcpy(atual->cor, receber->cor);
+}
+
 
 /**
  * Funcao que le o arquivo de dados fornecido como entrada exatamente como o mostrado no pdf
@@ -488,13 +505,14 @@ void printaMenu(Grafo *G, Dados **lido, int *usuario){
 	printf("2 - Ver solicitacoes recebidas\n");
 	printf("3 - Fazer Logoff\n");
 	printf("4 - Mostrar Sugestoes\n");
-	printf("5 - Eliminar Inimigos\n");
+	printf("5 - Eliminar inimigos\n");
 	printf("6 - Encontrar par(es)\n");
-	printf("7 - Listar Amigos\n");
-	printf("8 - Sair\n");
-
+	printf("7 - Listar amigos\n");
+	printf("8 - Ver perfil\n");
+	printf("9 - Sair\n");
 	scanf("%d", &operacao);
-	while(operacao != 8){
+
+	while(operacao != 9){
 		memset(solicitacao, '\0', 100);
 		memset(arquivo, '\0', 103);
 		switch(operacao){
@@ -570,8 +588,11 @@ void printaMenu(Grafo *G, Dados **lido, int *usuario){
 			printf("Sua lista de amigos:\n");
 			listarAmigos(G, *usuario, lido);
 			break;
+		case 8:
+			printf("Visualizando o perfil:\n");
+			imprimeAtual();
+			break;
 		}
-		
 		printf("Operacoes que podem ser realizadas:\n");
 		printf("1 - Fazer solicitacao\n");
 		printf("2 - Ver solicitacoes recebidas\n");
@@ -580,7 +601,8 @@ void printaMenu(Grafo *G, Dados **lido, int *usuario){
 		printf("5 - Eliminar inimigos\n");
 		printf("6 - Encontrar par(es)\n");
 		printf("7 - Listar amigos\n");
-		printf("8 - Sair\n");
+		printf("8 - Ver perfil\n");
+		printf("9 - Sair\n");
 		scanf("%d", &operacao);
 	}
 }
@@ -645,9 +667,9 @@ int main(void){
 		fclose(carregar);
 	}
 	
-	imprime_grafo(G);
-
 	if(usuario_logado != -1){
+		printf("aa%d", usuario_logado);
+		copiaparaAtual(lido[usuario_logado]);
 		printaMenu(G, lido, &usuario_logado);
 	}
 
