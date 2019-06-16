@@ -69,3 +69,12 @@ time: sao caetano
 sexo: masculino
 interessado em: feminino
 cor predileta: branco
+
+nome do usuario: mateus
+idade: 22
+cidade: franca
+filme predileto: harry potter
+time: corinthians
+sexo: masculino
+interessado em: feminino
+cor predileta: azul

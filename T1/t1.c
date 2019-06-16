@@ -492,6 +492,7 @@ void listarAmigos(Grafo *G, int usuario, Dados **lido){
 void printaMenu(Grafo *G, Dados **lido, int *usuario){
 
 	int operacao;
+	char validar;
 	int *solicitacoes_recebidas;
 	int quantidade_solicitacoes;
 	char arquivo[103];
@@ -592,6 +593,9 @@ void printaMenu(Grafo *G, Dados **lido, int *usuario){
 			printf("Visualizando o perfil:\n");
 			imprimeAtual();
 			break;
+		default:
+			printf("Digite uma opcao valida!\n");
+			break;
 		}
 		printf("Operacoes que podem ser realizadas:\n");
 		printf("1 - Fazer solicitacao\n");
@@ -645,11 +649,93 @@ void carregaDados(FILE *salvo, Grafo *G, int n_registros, Dados **lido){
 
 }
 
+void escreveArquivoAtual(FILE *arquivo){
+
+	fseek(arquivo, 0, SEEK_END);
+	fprintf(arquivo, "\n");
+	fprintf(arquivo, "nome do usuario: ");
+	fprintf(arquivo, "%s\n", atual->usuario);
+	fprintf(arquivo, "idade: ");
+	fprintf(arquivo, "%d\n", atual->idade);
+	fprintf(arquivo, "cidade: ");
+	fprintf(arquivo, "%s\n", atual->cidade);
+	fprintf(arquivo, "filme predileto: ");
+	fprintf(arquivo, "%s\n", atual->filme_fav);
+	fprintf(arquivo, "time: ");
+	fprintf(arquivo, "%s\n", atual->time);
+	fprintf(arquivo, "sexo: ");
+	fprintf(arquivo, "%s\n", atual->sexo);
+	fprintf(arquivo, "interessado em: ");
+	fprintf(arquivo, "%s\n", atual->interesse);
+	fprintf(arquivo, "cor predileta: ");
+	fprintf(arquivo, "%s\n", atual->cor);
+
+}
+
+void escreveArquivoSenha(){
+
+	FILE *escreve = fopen("logins.csv", "r+");
+	fseek(escreve, 0, SEEK_END);
+	fprintf(escreve, "\n");
+	fprintf(escreve, "%s,", atual->usuario);
+	fprintf(escreve, "%s\n", atual->senha);
+	fclose(escreve);
+}
+
+
+void criaConta(FILE *arquivo){
+
+	int sexo;
+	int interesse;
+
+	printf("Digite seu nome: ");
+ 	scanf("%[^\n\r]", atual->usuario);
+	scanf("%*c");
+	printf("Digite sua senha: ");	
+ 	scanf("%[^\n\r]", atual->senha);
+	scanf("%*c");
+	printf("Digite sua cidade atual: ");
+ 	scanf("%[^\n\r]", atual->cidade);
+	scanf("%*c");
+	printf("Digite sua cor favorita: ");
+ 	scanf("%[^\n\r]", atual->cor);
+	scanf("%*c");
+	printf("Digite seu filme favorito: ");
+ 	scanf("%[^\n\r]", atual->filme_fav);
+	scanf("%*c");
+	printf("Digite seu time: ");
+	scanf("%[^\n\r]", atual->time);
+	scanf("%*c");
+	printf("Digite sua idade: ");
+ 	scanf("%d", &(atual->idade));
+	printf("Qual seu sexo?\n[1] Masculino   [2] Feminino\n");	
+ 	scanf("%d", &sexo);
+	if(sexo == 1){
+		strcpy(atual->sexo, "masculino");
+	}
+	else if(sexo == 2){
+		strcpy(atual->sexo, "feminino");
+	}
+	printf("Voce e' interessado no sexo...?\n[1] Masculino   [2] Feminino\n");	
+	scanf("%d", &interesse);
+	if(interesse == 1){
+		strcpy(atual->interesse, "masculino");
+	}
+	else if(interesse == 2){
+		strcpy(atual->interesse, "feminino");
+	}
+
+	escreveArquivoSenha();
+	escreveArquivoAtual(arquivo);
+
+}
+
 int main(void){
 
 	int usuario_logado;
+	char opcao;
 
-	FILE *arquivo = fopen("dados.txt", "r");
+	FILE *arquivo = fopen("dados.txt", "r+");
 	FILE *carregar = fopen("salvo.txt", "r");
 
 	atual = (Dados*) malloc(sizeof(Dados));
@@ -658,6 +744,12 @@ int main(void){
 	for(int i = 0; i < 100; i++){
 		lido[i] = (Dados*) malloc(sizeof(Dados));
 	}
+
+	printf("Deseja criar uma conta?[s/n]\n");
+	scanf("%c", &opcao);
+	scanf("%*c");
+	if(opcao == 's') criaConta(arquivo);
+
 	leArquivo(arquivo, lido);
 	usuario_logado = printaLogin(lido);
 	Grafo *G = criar_grafo(&quantidade_registros);
@@ -668,7 +760,6 @@ int main(void){
 	}
 	
 	if(usuario_logado != -1){
-		printf("aa%d", usuario_logado);
 		copiaparaAtual(lido[usuario_logado]);
 		printaMenu(G, lido, &usuario_logado);
 	}
