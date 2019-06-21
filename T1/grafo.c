@@ -96,14 +96,32 @@ void remover_aresta(Grafo *G, int *v1, int *v2, int *erro, elem *P){
 					G->Adj[*v1].fim = ant;
 					free(atual);
 				}
-				else{
-					ant = atual;
-					atual = atual->prox;
+			}
+			else{
+				ant = atual;
+				atual = atual->prox;
+			}
+		}
+		*erro = 0;
+		encontrou = 0;
+		ant = G->Adj[*v2].ini;
+		atual = ant->prox;
+		while(atual != NULL && !encontrou){
+			if(atual->v == *v1){
+				encontrou = 1;
+				*P = atual->peso;
+				ant->prox = atual->prox;
+				if(G->Adj[*v2].fim == atual){
+					G->Adj[*v2].fim = ant;
+					free(atual);
 				}
+			}
+			else{
+				ant = atual;
+				atual = atual->prox;
 			}
 		}
 	}
-
 }
 
 int numero_vertices(Grafo *G){

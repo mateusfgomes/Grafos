@@ -78,3 +78,57 @@ time: corinthians
 sexo: masculino
 interessado em: feminino
 cor predileta: azul
+
+nome do usuario: Igao
+idade: 20
+cidade: NAC
+filme predileto: vingadores
+time: palmeiras
+sexo: masculino
+interessado em: feminino
+cor predileta: preto
+
+nome do usuario: GuiGay
+idade: 25
+cidade: jardinopolis
+filme predileto: o exterminador do futuro
+time: palmeiras
+sexo: masculino
+interessado em: feminino
+cor predileta: preto
+
+nome do usuario: Pedro
+idade: 19
+cidade: franca
+filme predileto: homem de ferro
+time: palmeiras
+sexo: masculino
+interessado em: feminino
+cor predileta: azul
+
+nome do usuario: Emanuela
+idade: 19
+cidade: franca
+filme predileto: homem de ferro 2
+time: palmeiras
+sexo: feminino
+interessado em: masculino
+cor predileta: azul
+
+nome do usuario: Lucas
+idade: 19
+cidade: franca
+filme predileto: homem de ferro
+time: palmeiras
+sexo: masculino
+interessado em: feminino
+cor predileta: azul
+
+nome do usuario: Debora
+idade: 20
+cidade: franca
+filme predileto: homem de ferro 2
+time: palmeiras
+sexo: feminino
+interessado em: masculino
+cor predileta: preto

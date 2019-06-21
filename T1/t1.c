@@ -4,7 +4,7 @@
 #include <math.h>
 #include "grafo.h"
 #include "dados.h"
-
+#include "sinopses.h"
 
 /**
  * Estrutura de um usuario
@@ -207,7 +207,7 @@ int verificaLogin(char login[100], char senha[100], FILE* fp){
 		memset(ignora, '\0', 100);
 	}
 
-	//TODO: NOME DE USUARIO INVALIDO, CHAMA A RECURSAO
+	return -1;
 
 }
 
@@ -237,6 +237,9 @@ int printaLogin(Dados **lido){
 
 }
 
+/**
+ * Funcao que procura um usuario solicitado para verificar se ele esta' a rede
+ */
 int procuraSolicitado(Dados **lido, char solicitacao[100]){
 	for(int i = 0; i < quantidade_registros; i++){
 		if(strcmp(lido[i]->usuario, solicitacao) == 0){
@@ -246,6 +249,9 @@ int procuraSolicitado(Dados **lido, char solicitacao[100]){
 	return -1;
 }
 
+/**
+ * Funcao que verifica se ha solicitacoes recebidas pelo usuario
+ */
 int *verificaSolicitacoes(Grafo *G, Dados **lido, int usuario, int *quantidade_solicitacoes){
 
 	char arquivo[103];
@@ -277,6 +283,10 @@ int *verificaSolicitacoes(Grafo *G, Dados **lido, int usuario, int *quantidade_s
 	return total_solicitacoes;
 }
 
+/**
+ * Bubble sort para ordenar na busca por verificacoes se ha' solicitacoes
+ * para um determinado usuario
+ */
 void bubbleSort (int *vetor, int n_elementos) {
     int k, j, aux;
     for (k = 1; k < n_elementos; k++) {
@@ -290,6 +300,10 @@ void bubbleSort (int *vetor, int n_elementos) {
     }
 }
 
+/**
+ * Busca Binaria para buscar uma chave, nesse caso, o usuario que esta na
+ * lista de solicitacoes ordenada em um vetor
+ */
 int buscaBinaria(int *vetor, int inicio, int fim, int chave) { 
     if (fim >= inicio) { 
         int meio = inicio + (fim - inicio) / 2; 
@@ -306,6 +320,11 @@ int buscaBinaria(int *vetor, int inicio, int fim, int chave) {
     return -1; 
 } 
 
+/**
+ * Funcao que verifica se uma solicitacao de amizade ja foi feita
+ * para um determinado usuario, ou se essa pessoa ja eh amiga daquela
+ * a qual ela solicita ser
+ */
 int verificaJaFeitas(Grafo* G, FILE *realizadas, int chave, int solicitado){
 
 	int aux, i = 0;	
@@ -331,6 +350,10 @@ int verificaJaFeitas(Grafo* G, FILE *realizadas, int chave, int solicitado){
 	return -1;
 }
 
+/**
+ * Funcao que busca solicitacoes de amizade para um determinado usuario
+ * em toda a rede social
+ */
 void mostraSugestoes(int usuario, Dados **lido, Grafo *G){
 	
 	double match = 0;
@@ -338,17 +361,23 @@ void mostraSugestoes(int usuario, Dados **lido, Grafo *G){
 
 	//Busca sugestoes em toda a rede
 	for(int i = 0; i < numero_vertices(G); i++){
+		
+		double filmes = similaridade(lido[i]->filme_fav, lido[usuario]->filme_fav);
+
 		if(i != usuario && strcmp(lido[i]->cidade, lido[usuario]->cidade) == 0){
 			match += 0.1;
 		}
 		if(i != usuario && strcmp(lido[i]->cor, lido[usuario]->cor) == 0){
-			match += 0.1;
+			match += 0.05;
 		}
-		if(i != usuario && strcmp(lido[i]->filme_fav, lido[usuario]->filme_fav) == 0){
-			match += 0.3;
+		if(filmes != -1){
+			match += (0.45 * filmes);
+			printf("%lf\n\n\n", 0.45 * filmes);
+		} else if(i != usuario && strcmp(lido[i]->filme_fav, lido[usuario]->filme_fav) == 0){
+			match += 0.45;
 		}
 		if(i != usuario && abs(lido[i]->idade - lido[usuario]->idade) < 3){
-			match += 0.4;
+			match += 0.3;
 		}
 		if(i != usuario && strcmp(lido[i]->time, lido[usuario]->time) == 0){
 			match += 0.1;
@@ -362,37 +391,52 @@ void mostraSugestoes(int usuario, Dados **lido, Grafo *G){
 	}
 
 	if(flagprint == 0){
-		printf("Nao ha' sugestoes para voce no momento\n");
+		printf("Nao ha' sugestoes para voce no momento\n\n");
 		flagprint = 0;
 	}
 
 }
 
+/**
+ * Funcao para ver a proximidade entre os gostos de determinados usuarios.
+ * Se os interesses tiverem 80% de colisoes e as pessoas forem interessadas
+ * uma pelo genero da outra, classifica-se um match para namorado(a). Caso
+ * contrario, uma porcentagem menor eh dada para amigos
+ */
 double calculaMatch(Dados **lido, int a, int b){
 
 	double match = 0;
+
+	double filmes = similaridade(lido[a]->filme_fav, lido[b]->filme_fav);
 
 	if(strcmp(lido[a]->cidade, lido[b]->cidade) == 0){
 		match += 0.1;
 	}
 	if(strcmp(lido[a]->cor, lido[b]->cor) == 0){
-		match += 0.1;
+		match += 0.05;
 	}
-	if(strcmp(lido[a]->filme_fav, lido[b]->filme_fav) == 0){
-		match += 0.3;
+	if(filmes != -1){
+		match += (0.45 * filmes);
+	} else if(strcmp(lido[a]->filme_fav, lido[b]->filme_fav) == 0){
+		match += 0.45;
 	}
 	if(abs(lido[a]->idade - lido[b]->idade) < 3){
-		match += 0.4;
+		match += 0.3;
 	}
 	if(strcmp(lido[a]->time, lido[b]->time) == 0){
 		match += 0.1;
 	}
-
-
+	
 	return match;
-
 }
 
+/**
+ * Funcao para aceitar uma solicitacao de amizade
+ * de determinado usuario (Liga aresta nao direcionada entre
+ * os vertices dos dois usuarios no grafo).
+ * Informa para o usuario a chance em porcentagem daquela
+ * amizade ser verdadeira
+ */
 int aceitarSolicitacoes(Dados **lido, int *solicitacoes_recebidas, int usuario, Grafo *G){
 
 	int escolha;
@@ -417,6 +461,9 @@ int aceitarSolicitacoes(Dados **lido, int *solicitacoes_recebidas, int usuario, 
 	return escolha;
 }
 
+/**
+ * Funcao que remove uma solicitacao apos ela ser aceita
+ */
 void removeSolicitacao(Dados **lido, int *solicitacoes, int quantidade_solicitacoes, int usuario){
 
 	FILE *fp;
@@ -436,6 +483,11 @@ void removeSolicitacao(Dados **lido, int *solicitacoes, int quantidade_solicitac
 	}
 }
 
+/**
+ * Funcao que mostra as possiveis pessoas que nao tem
+ * muitos interesses em comum com o usuario logado e as classifica
+ * como desnecessarias para esta pessoa
+ */
 void mostraReducoes(int usuario, Dados **lido, Grafo *G){
 
 	int *reducoes;
@@ -450,6 +502,10 @@ void mostraReducoes(int usuario, Dados **lido, Grafo *G){
 	free(reducoes);
 }
 
+/**
+ * Funcao que encontra varias possibilidades de namorado(a) para
+ * o usuario logado
+ */
 void encontraPares(int usuario, Dados **lido, Grafo *G){
 
 	int *pares;
@@ -466,13 +522,17 @@ void encontraPares(int usuario, Dados **lido, Grafo *G){
 	}
 
 	if(!flagprint){
-		printf("Nao ha possiveis pares!\n");
+		printf("Nao ha possiveis pares!\n\n");
 	}
 
 	free(pares);
 
 }
 
+/**
+ * Funcao que lista os amigos de um determinado usuario,
+ * isto e, ve todas as arestas de um determinado vertice no grafo
+ */
 void listarAmigos(Grafo *G, int usuario, Dados **lido){
 	
 	int *amigos;
@@ -485,10 +545,57 @@ void listarAmigos(Grafo *G, int usuario, Dados **lido){
 	}
 
 	if(quantidade_amigos == 0)
-		printf("Voce nao tem amigos!\n");
+		printf("Voce nao tem amigos!\n\n");
 
 }
 
+/**
+ * Funcao que remove um amigo de um determinado usuario, a funcao que mostra
+ * as possiveis reducoes nao remove os usuarios, pois isso deve vir da
+ * propria vontade do utilizador de remover estas amizades
+ * Essa funcao busca para ver se ha de fato o amigo a ser removido, remove a
+ * aresta de ambos e em seguida verifica se ha alguma solicitacao de amizade
+ * que foi realizada por qualquer uma das partes, apos isso, remove a solicitacao
+ */
+void removeAmigo(Grafo *G, Dados **lido, int usuario, char solicitacao[100], FILE *realizadas, char arquivo[103]){
+
+	int posicao;
+	int erro = 0;
+	int i = 0;
+	int aux;
+	double peso = 0;
+	
+	posicao = procuraSolicitado(lido, solicitacao);
+
+	if(posicao != -1){
+		remover_aresta(G, &usuario, &posicao, &erro, &peso);
+		int *total_solicitacoes = malloc(numero_vertices(G) * sizeof(int));
+
+		while(fscanf(realizadas, "%d", &aux) != EOF){
+			total_solicitacoes[i] = aux;
+			i++;
+		}
+		fclose(realizadas);
+		realizadas = fopen(arquivo, "w+");
+		for(int a = 0; a < i; a++){
+			if(total_solicitacoes[a] != posicao){
+				fprintf(realizadas, "%d\n", total_solicitacoes[a]);
+			}
+		}
+	}
+	else{
+		printf("Essa pessoa nao eh seu amigo!\n\n");
+		return;
+	}
+
+	printf("Amigo removido!\n\n");
+
+}
+
+/**
+ * Funcao que somente printa o menu e chama as funcoes acima para serem executadas
+ * alem de realizar a leitura dos dados
+ */
 void printaMenu(Grafo *G, Dados **lido, int *usuario){
 
 	int operacao;
@@ -510,16 +617,22 @@ void printaMenu(Grafo *G, Dados **lido, int *usuario){
 	printf("6 - Encontrar par(es)\n");
 	printf("7 - Listar amigos\n");
 	printf("8 - Ver perfil\n");
-	printf("9 - Sair\n");
+	printf("9 - Remover amigo\n");
+	printf("10 - Sair\n");
 	scanf("%d", &operacao);
 
-	while(operacao != 9){
+	while(operacao != 10){
 		memset(solicitacao, '\0', 100);
 		memset(arquivo, '\0', 103);
 		switch(operacao){
 		case 1:
 			printf("Para quem voce deseja enviar a solicitacao: ");
 			scanf("%s", solicitacao);
+			int verifica = procuraSolicitado(lido, solicitacao);
+			if(verifica == -1){
+				printf("Este usuario nao existe!\n");
+				break;
+			}
 			strcpy(arquivo, solicitacao);
 			arquivo[strlen(arquivo)] = '.';
 			arquivo[strlen(arquivo)] = 't';
@@ -529,13 +642,13 @@ void printaMenu(Grafo *G, Dados **lido, int *usuario){
 			FILE *realizadas = fopen(arquivo, "a+");
 			if(verificaJaFeitas(G, realizadas, *usuario, solicitado) == -1){
 				fprintf(realizadas, "%d\n", *usuario);
-				printf("Solicitacao realizada com sucesso!\n");
+				printf("Solicitacao realizada com sucesso!\n\n");
 			}
 			else if(verificaJaFeitas(G, realizadas, *usuario, solicitado) == -2){
-				printf("Esse usuario ja e' seu amigo!\n");
+				printf("Esse usuario ja e' seu amigo!\n\n");
 			}
 			else{
-				printf("Solicitacao ja realizada!\n");
+				printf("Solicitacao ja realizada!\n\n");
 			}
 			fclose(realizadas);
 			break;
@@ -557,21 +670,25 @@ void printaMenu(Grafo *G, Dados **lido, int *usuario){
 				if(teste == 's'){
 					int escolha = aceitarSolicitacoes(lido, solicitacoes_recebidas, *usuario, G);
 					if(escolha == -1){
-						printf("Operacao cancelada\n");
+						printf("Operacao cancelada\n\n");
 						free(solicitacoes_recebidas);
 						break;
 					}
 					solicitacoes_recebidas[escolha] = solicitacoes_recebidas[quantidade_solicitacoes - 1];
 					quantidade_solicitacoes--;
 					removeSolicitacao(lido, solicitacoes_recebidas, quantidade_solicitacoes,*usuario);			
-					printf("Solicitacao Aceita!\n");		
+					printf("Solicitacao Aceita!\n\n");		
 				}
 			}
 			free(solicitacoes_recebidas);
 			break;
 		case 3:
-			printf("Logoff realizado!\n");
+			printf("Logoff realizado!\n\n\n");
 			*usuario = printaLogin(lido);
+			if(*usuario == -1){
+				printf("ERRO NO LOGIN | USUARIO INEXISTENTE\n");
+				return;
+			}
 			break;
 		case 4:
 			printf("Suas sugestoes de amizades:\n");
@@ -593,6 +710,27 @@ void printaMenu(Grafo *G, Dados **lido, int *usuario){
 			printf("Visualizando o perfil:\n");
 			imprimeAtual();
 			break;
+		case 9:
+			printf("Removendo um amigo\n");
+			char solicitacao[100];
+			memset(solicitacao, '\0', 100);
+			printf("Qual amigo voce quer eliminar? ");
+			scanf("%*c");
+			scanf("%[^\n\r]", solicitacao);
+			scanf("%*c");
+			verifica = procuraSolicitado(lido, solicitacao);
+			if(verifica == -1){
+				printf("Este usuario nao existe!\n");
+				break;
+			}
+			strcpy(arquivo, solicitacao);
+			arquivo[strlen(arquivo)] = '.';
+			arquivo[strlen(arquivo)] = 't';
+			arquivo[strlen(arquivo)] = 'x';
+			arquivo[strlen(arquivo)] = 't';
+			realizadas = fopen(arquivo, "a+");
+			removeAmigo(G, lido, *usuario, solicitacao, realizadas, arquivo);
+			break;
 		default:
 			printf("Digite uma opcao valida!\n");
 			break;
@@ -606,15 +744,25 @@ void printaMenu(Grafo *G, Dados **lido, int *usuario){
 		printf("6 - Encontrar par(es)\n");
 		printf("7 - Listar amigos\n");
 		printf("8 - Ver perfil\n");
-		printf("9 - Sair\n");
+		printf("9 - Remover amigo\n");
+		printf("10 - Sair\n");
 		scanf("%d", &operacao);
 	}
 }
 
+/**
+ * Funcao para salvar os dados do grafo num arquivo para que, quando
+ * fechada a rede social, as pessoas permanecam como amigas umas 
+ * das outras
+ */
 void salvaDados(Grafo *G, FILE *salvar){
 	salvaGrafo(G, salvar);
 }
 
+/**
+ * Primeira funcao a ser executada apos a main, para realizar o
+ * carregamento dos dados da rede social
+ */
 void carregaDados(FILE *salvo, Grafo *G, int n_registros, Dados **lido){
 
 	char teste, teste2;
@@ -649,6 +797,11 @@ void carregaDados(FILE *salvo, Grafo *G, int n_registros, Dados **lido){
 
 }
 
+/**
+ * Funcao para realizacao do cadastro de uma determinada pessoa que deseja 
+ * entrar para a rede social, assim, os cadastros nao precisam mais
+ * ser adicionados diretamente no arquivo de texto
+ */
 void escreveArquivoAtual(FILE *arquivo){
 
 	fseek(arquivo, 0, SEEK_END);
@@ -669,20 +822,25 @@ void escreveArquivoAtual(FILE *arquivo){
 	fprintf(arquivo, "%s\n", atual->interesse);
 	fprintf(arquivo, "cor predileta: ");
 	fprintf(arquivo, "%s\n", atual->cor);
-
 }
 
+/**
+ * Escreve o arquivo que relaciona as senhas com os
+ * nomes de usuario, no arquivo "logins.csv", para aqueles
+ * usuarios os quais desejam se cadastrar agora
+ */
 void escreveArquivoSenha(){
-
 	FILE *escreve = fopen("logins.csv", "r+");
 	fseek(escreve, 0, SEEK_END);
-	fprintf(escreve, "\n");
 	fprintf(escreve, "%s,", atual->usuario);
 	fprintf(escreve, "%s\n", atual->senha);
 	fclose(escreve);
 }
 
-
+/**
+ * Funcao para realizar a coleta de dados
+ * pelo terminal do nomo usuario que deseja se cadastrar
+ */
 void criaConta(FILE *arquivo){
 
 	int sexo;
@@ -732,14 +890,15 @@ void criaConta(FILE *arquivo){
 
 int main(void){
 
-	int usuario_logado;
-	char opcao;
+	int usuario_logado; //controla qual o usuario atual
+	char opcao; //controla se ha necessidade de criar uma nova conta
 
-	FILE *arquivo = fopen("dados.txt", "r+");
-	FILE *carregar = fopen("salvo.txt", "r");
+	FILE *arquivo = fopen("dados.txt", "r+"); //arquivo de cadastrados
+	FILE *carregar = fopen("salvo.txt", "r"); //arquivo que guarda o grafo antigo
 
 	atual = (Dados*) malloc(sizeof(Dados));
 
+	//Vetor que controla os lidos de um arquivo txt
 	Dados **lido = (Dados**) malloc(100*sizeof(Dados*));
 	for(int i = 0; i < 100; i++){
 		lido[i] = (Dados*) malloc(sizeof(Dados));
@@ -748,13 +907,13 @@ int main(void){
 	printf("Deseja criar uma conta?[s/n]\n");
 	scanf("%c", &opcao);
 	scanf("%*c");
-	if(opcao == 's') criaConta(arquivo);
-
+	if(opcao == 's') criaConta(arquivo); 
+	rewind(arquivo);
 	leArquivo(arquivo, lido);
 	usuario_logado = printaLogin(lido);
 	Grafo *G = criar_grafo(&quantidade_registros);
 	
-	if(carregar != NULL){
+	if(carregar != NULL){ //Carrega os dados do grafo que existia anteriormente, se existia
 		carregaDados(carregar, G, quantidade_registros, lido);
 		fclose(carregar);
 	}
@@ -762,6 +921,9 @@ int main(void){
 	if(usuario_logado != -1){
 		copiaparaAtual(lido[usuario_logado]);
 		printaMenu(G, lido, &usuario_logado);
+	}
+	else{
+		printf("ERRO NO LOGIN | USUARIO INVALIDO\n\n");
 	}
 
 	FILE *salvar = fopen("salvo.txt", "w");
