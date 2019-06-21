@@ -685,6 +685,7 @@ void printaMenu(Grafo *G, Dados **lido, int *usuario){
 		case 3:
 			printf("Logoff realizado!\n\n\n");
 			*usuario = printaLogin(lido);
+			copiaparaAtual(lido[*usuario]);
 			if(*usuario == -1){
 				printf("ERRO NO LOGIN | USUARIO INEXISTENTE\n");
 				return;

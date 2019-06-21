@@ -1,4 +1,185 @@
 nome: prometheus
 ano: 2012
 gênero: Ficcao cientifica,Suspense
-sinopse:
+sinopse:2089. elizabeth shaw noom rapac charli holloway logan marshall-green 
+explor encontr mesm pint vár cavern terr bas nist 
+desenvolv teor pint apont lug específ univers 
+algum relaç iníci vid planet dupl convenc milion 
+pet weyland guy pearc banc car exped interestel investig 
+assunt dest form elizabeth charli entr tripul nav prometh 
+compost robô david michael fassbend dire meredith vick charliz 
+theron capitã janek idril elb outr tod exceç david hibern 
+son criogên nav cheg obje acontec 2093. encant 
+descobert nov mund possibil revel segred orig 
+vid terr elizabeth charli perceb local é bast perig 
+
+
+
+
+nome: vingadores: ultimato
+ano: 2019
+categoria: Acao,Fantasia,Aventura
+sinopse:após than elimin metad criat viv ving precis lid 
+dor perd amig ent quer tony stark robert downey jr. vag 
+perd espaç águ com stev rog chril ev natash romanov 
+scarlett johansson precis lider resist contr titã louc 
+
+
+
+
+nome: vingadores: guerra infinita
+ano: 2018
+categoria: Acao,Fantasia,Aventura
+sinopse:than josh brolin enfim cheg terr dispost reun joi infinit enfrentá-l ving precis unir forç guard galáx temp lid desavenç algum integr 
+
+
+
+
+nome: capitao america: o primeiro vingador
+ano: 2011
+categoria: Acao,Aventura,Ficcao Cientifica
+sinopse:2ª guerr mund stev rog chril ev é jov aceit ser voluntári séri experi vis cri supersold americ milit conseg transformá-l arm human log perceb supersold é vali demal pôr risc lut contr nazist dest form rog é us celebr exércit marc presenç par realiz europ intuit levant est combat tant pass us vestiment cor bande est unid azul branc vermelh plan nazist faz rog açã assum alcunh capitã amér us dom combatê-l plen trinch guerr 
+
+
+
+
+nome: homem de ferro
+ano: 2008
+categoria: Acao,Ficcao Cientifica
+sinopse:tony stark robert downey jr. é industr bilion é brilh inven ser sequestr é obrig terror constru arm devast invé dist constró armad alt tecnolog permit fuj cativ part ent pass usá-l combat crim sob alter-eg hom ferr 
+
+
+
+
+nome: homem de ferro 2
+ano: 2010
+categoria: Acao,Aventura,Ficcao Cientifica
+sinopse:após confess mund ser hom ferr tony stark robert downey jr. pass ser alv govern est unid desej entreg poder traj nega govern pass desenvolv nov traj mai rival stark justin hamm sam rockwell jim rhod don cheadl braç direit tony é coloc centr dest conflit faz assum ident máquin combat paralel ivan vank mickey rourk cri alter-eg whiplash ving ato famíl stark pass combat whiplash persegu govern stark cont apoi nov assist natash romanoff scarlett johansson nick fury samuel l. jackson dire s.h.i.e.l.d 
+
+
+
+
+nome: o incrivel hulk
+ano: 2008
+categoria: Acao,Fantasia
+sinopse:cient bruc bann escond brasil enquant busc desesperad cur mut transform monstr incontrol assim pod nov lev vid norm fic lad mulh ama porém dur process lut contr nov inimig qu capturá-l conhec `` abomin '' 
+
+
+
+
+nome: thor
+ano: 2011
+categoria: Acao,Fantasia,Aventura 
+sinopse:th chril hemsworth prest receb com asgard mão pai odin anthony hopkim forç inimig quebr acord paz dispost ving ocorr jov guerr desobedec ord rei quas dá iníci nov guerr rein enfurec atitud filh herd odin ret pod expuls terr lá th acab conhec cient jan fost natali portman precis recuper martel enquant irm lok tom hiddleston elab plan assum pod guerr deu trov faz mesm viag busc amig imped aconteç vier so inimig pres batalh apen começ 
+
+
+
+
+nome: homem de ferro 3
+ano: 2013
+categoria: Acao,Ficcao Cientifica 
+sinopse:desd ataqu chitaur nov york tony stark robert downey jr. vem enfrent dificuldad dorm conseg terr pesadel tem consegu proteg namor pepp pott gwyneth paltrow vári inimig pass ter após vest armad hom ferr mandarim ben kingsley decid atacá-l forç total destru mans coloc vid pepp risc enfrentá-l stark precis ressurg fund mar ond lev junt destroç mans super mai med fracass 
+
+
+
+
+nome: os vingadores
+ano: 2012
+categoria: Acao,Aventura,Ficcao Cientifica
+sinopse:lok irm th ganh acess pod ilimit cub cósm roubá-l dentr instal s.h.i.e.l.d nick fury dire dest agênc internac mantém paz log reún únic super-herol capaz defend terr ameaç preced hom ferr capitã amér hulk th viúv negr gav arqu form tim sonh fury precis aprend coloc ego lad agir grup prol human 
+
+
+
+
+nome: thor: o mundo sombrio
+ano: 2013
+categoria: Acao,Fantasia,Aventura
+sinopse:enquant th chril hemsworth lider últ batalh conquist paz nov rein maldit elf negr malekith christoph eccleston acord long son sedent vinganç louc lev tod escur etern alert perig odin anthony hopkim heró precis cont ajud companh volstagg ray stevenson sif jaimi alexand outr irm traiço lok tom hiddleston plan audaci salv univers grand mal caminh th am jan fost natali portman cruz nov dess vez vid real perig 
+
+
+
+
+nome: capitao america 2: o soldado invernal
+ano: 2014
+categoria: Aventura,Acao,Ficcao Cientifica
+sinopse:após event catastróf nov york ving stev rog conhec capitã amér seg tent ajust mund modern porém coleg agênc s.h.i.e.l.d é atac stev vê pres red intrig ameaç coloc mund risc parc viúv negr falcã nov ali capitã amér enfrent misteri inesper inimig sold invern 
+
+
+
+
+nome: vingadores: era de ultron
+ano: 2015
+categoria: Acao,Aventura,Ficcao Cientifica
+sinopse:tent proteg planet ameaç tony stark constró sistem intelig artific cuid paz mund projet acab dand err ger nasc ultron destin terr jog capitã amér hom ferr th hulk viúv negr gav arqu unir vez salv raç human extinç 
+
+
+
+
+nome: capitao america: guerra civil
+ano: 2016
+categoria: Acao,Fantasia
+sinopse:stev rog chril ev é atual líd ving super-grup herol form viúv negr scarlett johansson feitic escarlat elizabeth olsen vis paul bettany falcã anthony macki máquin combat don cheadl ataqu ultron fez polít busc algum mei control super-herol ato afet tod human tal decis coloc capitã amér rot colis tony stark robert downey jr. hom ferr 
+
+
+
+
+nome: interestelar
+ano: 2014
+categoria: Ficcao Cientifica,Drama
+sinopse:reserv natur terr cheg fim grup astron receb miss verific possível planet receb popul mund possibilit continu espéci coop é cham lider grup aceit miss sab pod nunc ver filh lad brand jenkim doyl seguir busc nov lar 
+
+
+
+
+nome: o poderoso chefao
+ano: 1972
+categoria: Policial,Drama
+sinopse:don vit corleon marlon br é chef `` famíl '' nov york feliz poi conni tal shir filh cas carl giann russ porém dur fest bonas salvator corsitt é vist escritóri don corleon ped `` justiç '' vinganç verdad contr membr quadrilh espanc barb filh ter recus faz sex preserv honr vit discut argument bonas sensibiliz promet hom maltrat filh bonas mort poi sev castig vit porém deix clar pod cham bonas algum dia devolv `` favor '' lad mei fest terc filh vit michael al pacin capitã mar decor pouc volt 2ª guerr mund universit educ sens percep quas é not maior pres exceç namor faculdad kay ad dian keaton descend itali ama contrapart alguém é bem not johnny fontan al martin can bal român provoc grit jov beir hist don corleon ajud johnny aind começ carr pres contrat líd grand band carr johnny deslanch quer faz carr sol ser padr vit procur líd band oferec 10 mil dól deix johnny sair ped recus assim dia seguint vit volt acompanh luc bras lenny mont capang após hor assin liber apen mil dól hav detalh `` negoci '' luc coloc arm cabeç líd band agor mei alegr fest johnny qu fal alg séri vit poi precis consegu princip papel film levant carr chef estúdi jack woltz john marley pens contratá-l nerv johnny começ chor vit irrit esbofete promet conseguir almej papel enquant fest continu acontec don corleon comun tom hagen robert duvall filh adot atu conselh carl empreg nad import `` negóci '' dev ser discut frent verd problem começ vit sollozz al lettier gângst apoi famíl rival encabeç phillip tattagl vic rendin filh brun tony giorgi sollozz reun vit sonny outr cont famíl pretend estabelec grand esquem vend narcó nov york exig permiss proteç polít vit agir don corleon ode idé poi satisfeit oper jog mulh proteç apen pont iceberg mort lut `` famíl '' 
+
+
+
+
+nome: a lista de schindler
+ano: 1993
+categoria: Historico,Guerra
+sinopse:inusit histór osk schindl li neeson sujeit oportun sedu `` arm '' simpá comerci merc negr acim tud hom relacion bem regim nazist tant membr própri part nazist imped ser pres algum vez sempr libert rapid ra contat entant apes defeit am ser human assim fez imposs pont perd fortun consegu salv mil jud camp concentr 
+
+
+
+
+nome: um sonho de liberdade
+ano: 1995
+categoria: Drama
+sinopse:1946 andy dufresn tim robbim jov bem suced banc vid radic modific ser conden crim nunc comet homicídi esp am é mand pris é pesadel qualqu detent penitenciár estad shawshank main lá irá cumpr pen perpétu andy log apresent warden norton bob gunton corrupt cruel agent penitenci usa bíbl arm control capitã byron hadley clancy brown trat intern animal andy faz amizad ellil boyd redding morgan freeman prision cumpr pen 20 ano control merc negr institu 
+
+
+
+
+nome: o poderoso chefao 2
+ano: 1974
+categoria: Policial,Drama
+sinopse:iníci sécul xx após máf local mat famíl jov vit robert nir fog cidad sicíl vai amér adult littl italy vit lut ganh vid legal ileg mant esp filh mat black hand fanucc gaston moschin exig comerci part ganh mort fanucc poderi vit cresc famíl é import leg famíl vai enorm negóci ano 50 control caçul michael corleon al pacin agor base lag taho michael planej faz incurs la veg havan instal negóci lig laz descobr ali hyman roth lee strasberg tent matá-l cresc parano michael descobr amb acab cas kay dian keaton irm fred john cazal tra escap acus feder michael concentr atenç lid inimig 
+
+
+
+
+nome: sempre ao seu lado
+ano: 2009
+categoria: Drama
+sinopse:park wilson richard ger é profes universit retorn trabalh encontr estaçã tr filhot cachorr raç akit conhec lealdad ter deixá-l estaçã park lev cas sab cat joan allen esp é contr presenç cachorr pouc park afeiço filhot nom hach escrit col japon cat ced aceit perman hach cresc pass acompanh park estaçã tr retorn local hor profes volt acontec inesper alt vid 
+
+
+
+
+nome: antes que eu va
+ano: 2017
+categoria: Drama,Suspense
+sinopse:samanth kingston é garot tud jov pod desej vid bel namor amig entant vid perfeit cheg final abrupt repentin dia 12 fever dia dia outr qualqu mort sam segund ant real morr oportun mud últ seman talv destin 
+
+
+
+
+nome: clube da luta
+ano: 1999
+categoria: Suspense,Drama
+sinopse:jack edward norton é execu jov trabalh investig segur mor conforta fic cad vez insatisfeit vid medíocr pior enfrent terr cris insôn encontr cur inusit falt son frequent grup auto-ajud ness encontr pass conviv pesso problemá vici marl sing helen bonh cart conhec estranh tyl durden brad pitt misteri chei ide tyl apresent jack grup secret encontr extravas angúst tens através violent combat corpor 
