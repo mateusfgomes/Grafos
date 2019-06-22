@@ -132,3 +132,21 @@ time: palmeiras
 sexo: feminino
 interessado em: masculino
 cor predileta: preto
+
+nome do usuario: Guilherme
+idade: 20
+cidade: Sao Carlos
+filme predileto: Homem de Ferro 3
+time: Corinthians
+sexo: masculino
+interessado em: feminino
+cor predileta: Azul
+
+nome do usuario: Relatorio
+idade: 20
+cidade: Campinas
+filme predileto: Homem de Ferro
+time: Corinthians
+sexo: masculino
+interessado em: feminino
+cor predileta: Azul

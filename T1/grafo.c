@@ -376,7 +376,7 @@ int *percorre_lista_pares(int vertice, Grafo *G, int *quantidade_valores){
 	aux = G->Adj[vertice].ini->prox;
 
 	while(aux != NULL){
-		if(aux->peso > 0.80){
+		if(aux->peso > 0.7){
 			maiores_valores[i] = aux->v;
 			i++;
 		}

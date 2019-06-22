@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "sinopses.h"
-#include <unistd.h>
 
 //Struct para guardar os dados de um filme
 typedef struct FILME{
@@ -72,9 +71,6 @@ int busca_binaria(FILME *vetor, int l, int r, char *chave) {
 double similaridade(char *nome1, char *nome2){
 
 
-	system("python3 sinopses.py"); //Chama o STEMMER em python.
-
-	sleep(2); //Sleep para garantir que antes de inciar a leitura do .txt ele ja tenha sido totalmente processado.
 
 	FILE* arq = fopen("saida.txt", "r");
 

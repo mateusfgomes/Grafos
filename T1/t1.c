@@ -6,6 +6,7 @@
 #include "dados.h"
 #include "sinopses.h"
 
+
 /**
  * Estrutura de um usuario
 **/
@@ -280,6 +281,8 @@ int *verificaSolicitacoes(Grafo *G, Dados **lido, int usuario, int *quantidade_s
 
 	*quantidade_solicitacoes = i;
 
+	fclose(fp);
+
 	return total_solicitacoes;
 }
 
@@ -371,13 +374,12 @@ void mostraSugestoes(int usuario, Dados **lido, Grafo *G){
 			match += 0.05;
 		}
 		if(filmes != -1){
-			match += (0.45 * filmes);
-			printf("%lf\n\n\n", 0.45 * filmes);
+			match += (0.40 * filmes);
 		} else if(i != usuario && strcmp(lido[i]->filme_fav, lido[usuario]->filme_fav) == 0){
-			match += 0.45;
+			match += 0.40;
 		}
 		if(i != usuario && abs(lido[i]->idade - lido[usuario]->idade) < 3){
-			match += 0.3;
+			match += 0.35;
 		}
 		if(i != usuario && strcmp(lido[i]->time, lido[usuario]->time) == 0){
 			match += 0.1;
@@ -416,12 +418,12 @@ double calculaMatch(Dados **lido, int a, int b){
 		match += 0.05;
 	}
 	if(filmes != -1){
-		match += (0.45 * filmes);
+		match += (0.40 * filmes);
 	} else if(strcmp(lido[a]->filme_fav, lido[b]->filme_fav) == 0){
-		match += 0.45;
+		match += 0.40;
 	}
 	if(abs(lido[a]->idade - lido[b]->idade) < 3){
-		match += 0.3;
+		match += 0.35;
 	}
 	if(strcmp(lido[a]->time, lido[b]->time) == 0){
 		match += 0.1;
@@ -476,11 +478,13 @@ void removeSolicitacao(Dados **lido, int *solicitacoes, int quantidade_solicitac
 	arquivo[strlen(arquivo)] = 'x';
 	arquivo[strlen(arquivo)] = 't';
 
-	fp = fopen(arquivo, "w");
-
+	fp = fopen(arquivo, "w+");
+	
 	for(int i = 0; i < quantidade_solicitacoes; i++){
 		fprintf(fp,"%d\n",solicitacoes[i]);
 	}
+
+	fclose(fp);
 }
 
 /**
@@ -890,6 +894,9 @@ void criaConta(FILE *arquivo){
 }
 
 int main(void){
+
+	system("python3 sinopses.py"); //Chama o STEMMER em python.
+
 
 	int usuario_logado; //controla qual o usuario atual
 	char opcao; //controla se ha necessidade de criar uma nova conta
